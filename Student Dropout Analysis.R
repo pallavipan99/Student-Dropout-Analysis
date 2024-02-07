@@ -43,3 +43,24 @@ barplot(dropout_by_school_reason,
         ylab = "Dropout Rate", 
         col = "red", 
         border = "black")
+
+# Query 1: Number of students who dropped out by school
+school_dropout_table<-table(one$School, one$Dropped_Out)
+barplot(school_dropout_table, main="Number of Students Who Dropped Out by School",
+        xlab="School", ylab="Number of Students", col=c("lightblue", "lightgreen"),
+        beside=TRUE, legend = rownames(school_dropout_table))
+
+# Query 2: Gender distribution of dropout students
+gender_dropout_table<-table(one$Gender, one$Dropped_Out)
+
+# Query 3: Dropout rates based on parental education
+tapply(one$Dropped_Out, list(one$Mother_Education, one$Father_Education), mean)
+
+# Query 4: Alcohol consumption by gender
+alcohol_consumption_by_gender<-tapply(one$Weekend_Alcohol_Consumption, one$Gender, mean)
+barplot(alcohol_consumption_by_gender, 
+        main = "Average Weekend Alcohol Consumption by Gender", 
+        xlab = "Gender", 
+        ylab = "Average Alcohol Consumption (units)", 
+        col = "red", 
+        border = "black")
