@@ -64,3 +64,30 @@ barplot(alcohol_consumption_by_gender,
         ylab = "Average Alcohol Consumption (units)", 
         col = "red", 
         border = "black")
+
+# Query 5: Subset of students with high family relationships
+high_family_relationship <- subset(one, Family_Relationship > 4)
+print(high_family_relationship)
+
+# Query 6: Students who dropped out and their alcohol consumption patterns
+dropouts_vs_alcohol <- subset(one, Dropped_Out == TRUE)
+tapply(dropouts_vs_alcohol$Weekend_Alcohol_Consumption, dropouts_vs_alcohol$Gender, mean)
+
+# Query 7: Study time and its impact on final grades
+tapply(one$Final_Grade, one$Study_Time, mean)
+boxplot(one$Final_Grade ~ one$Study_Time,
+        main = "Study Time vs Final Grades",
+        xlab = "Study Time (hours per week)",
+        ylab = "Final Grade",
+        col = "lightblue",
+        border = "black")
+
+# Query 8: Relationship between family support and dropout rate
+tapply(one$Dropped_Out, one$Family_Support, mean)
+
+# Query 9: Grades based on students' free time
+tapply(one$Final_Grade, one$Free_Time, mean)
+
+# Query 10: Subset of students who have both school support and family support
+supportive_students <- subset(one, School_Support == 'yes' & Family_Support == 'yes')
+print(supportive_students)
