@@ -91,3 +91,29 @@ tapply(one$Final_Grade, one$Free_Time, mean)
 # Query 10: Subset of students who have both school support and family support
 supportive_students <- subset(one, School_Support == 'yes' & Family_Support == 'yes')
 print(supportive_students)
+
+# Hypothesis 1: Strong Hypothesis
+cat("Significance Level: 0.01\n")
+# Family Support vs Dropout Rates - Filter for students with low grades (<10) and high absences (>15)
+subset_data <- subset(one, Final_Grade < 10 & Number_of_Absences > 15 & (Mother_Education >= 3 | Father_Education >= 3))
+# Create Family Support Group
+subset_data$Family_Support_Group <- ifelse(subset_data$Family_Support == "yes", "With Support", "Without Support")
+# Calculate dropout rates using tapply
+dropout_rates_hypothesis_1 <- tapply(subset_data$Dropped_Out, subset_data$Family_Support_Group, mean)
+# Perform the permutation test 
+p_value_1 <- permutation_test(subset_data, "Family_Support_Group", "Dropped_Out", 100000, "With Support", "Without Support")
+# Print the result
+cat("P-value for Hypothesis 1 (Family Support vs Dropout):", p_value_1, "\n")
+
+#Hypothesis 2: Close Call Hypothesis
+cat("Significance Level: 0.05\n")
+# Create Absence Group based on existing data
+one$Absence_Group <- ifelse(one$Number_of_Absences > 10, "High Absences", "Low Absences")
+# Check the distribution of Absence Groups
+cat("Counts in Absence Groups:\n")
+print(table(one$Absence_Group))
+# Calculate dropout rates using tapply
+dropout_rates_hypothesis_2 <- tapply(one$Dropped_Out, one$Absence_Group, mean)
+# Perform the permutation test comparing Low Absences vs High Absences
+p_value_2 <- permutation_test(one, "Absence_Group", "Dropped_Out", 10000, "Low Absences", "High Absences")
+cat("P-value for Hypothesis 2 (Low vs High Absences):", p_value_2, "\n")
