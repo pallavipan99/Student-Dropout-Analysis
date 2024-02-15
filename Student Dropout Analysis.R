@@ -117,3 +117,25 @@ dropout_rates_hypothesis_2 <- tapply(one$Dropped_Out, one$Absence_Group, mean)
 # Perform the permutation test comparing Low Absences vs High Absences
 p_value_2 <- permutation_test(one, "Absence_Group", "Dropped_Out", 10000, "Low Absences", "High Absences")
 cat("P-value for Hypothesis 2 (Low vs High Absences):", p_value_2, "\n")
+
+
+# Hypothesis 3: Failed to Reject Null Hypothesis
+cat("Significance Level: 0.05\n")
+# Alternative Hypothesis (H1): Different reasons for choosing a school affect dropout rates
+reason_a <- "course"      # First valid category
+reason_b <- "reputation"  # Second valid category
+# Perform z-test for the chosen reasons for choosing school
+p_value_3 <- z_test_from_data(one, "Reason_for_Choosing_School", "Dropped_Out", reason_a, reason_b)
+# Print the p-value for Hypothesis 3
+cat("P-value for Hypothesis 3 (Reason for Choosing School vs Dropout):", p_value_3, "\n")
+
+# Narrow Query
+# Calculate M: mean of Number_of_Absences for the subset
+M_absences <- mean(subset_data$Number_of_Absences)
+# Calculate M0: mean of Number_of_Absences for the entire dataset
+M0_absences <- mean(one$Number_of_Absences)
+subset_data <- subset(one, Family_Support == 'no' & Number_of_Absences > 20)
+# Check if M > 2 * M0 or M < 0.5 * M0
+cat("M0:", M0_absences, "\nM:", M_absences, "\n")
+cat("Condition 1 (M > 2 * M0):", M_absences > 2 * M0_absences, "\n")
+cat("Condition 2 (M < 0.5 * M0):", M_absences < 0.5 * M0_absences, "\n")
